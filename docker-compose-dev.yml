@@ -12,7 +12,7 @@ services:
       - competitionservice
       - storageservice
     ports:
-      - 8089:80
+      - 80:80
     volumes:
       - ./nginx-conf/default.conf:/etc/nginx/conf.d/default.conf
   natneg-helper:
@@ -28,17 +28,19 @@ services:
       UNSOLICITED_IPPORT_PROBE_DRIVER: unset
       SKIP_ERTL: 1
   qr-service:
-    image: "chcniz/openspy-qr-service"
+    build: "./qr.service"
     hostname: "qr-service"
     restart: on-failure
     depends_on:
       - rabbit
+      - redis
     environment:
       RABBITMQ_URL: amqp://rabbitmq:rabbitmq@rabbit
       REDIS_URL: redis://redis:6379
-      GEOIP_DB_PATH: /GeoLite2-City.mmdb
+      GEOIP_DB_PATH: /opt/GeoLite2-City.mmdb
     volumes:
-      - ./geoip/GeoLite2-City.mmdb:/GeoLite2-City.mmdb
+      - ${PWD}/geoip/GeoLite2-City.mmdb:/opt/GeoLite2-City.mmdb
+    entrypoint: "sleep 30 && npm run start"
   gamestats-web:
     image: "chcniz/openspy-gamestats-web"
     hostname: "gamestats-web"
@@ -55,3 +57,4 @@ services:
       API_ENDPOINT: http://core-web:8080
       MONGODB_URI: mongodb://OpenSpy:OpenSpy123@mongo:27017
       PORT: 4000
+

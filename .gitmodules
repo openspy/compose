@@ -7,3 +7,9 @@
 [submodule "webservices"]
 	path = webservices
 	url = https://github.com/openspy/webservices.git
+[submodule "natneg"]
+	path = natneg
+	url = https://github.com/openspy/natneg-helper
+[submodule "qr.service"]
+	path = qr.service
+	url = https://github.com/openspy/qr.service
